@@ -1,6 +1,6 @@
-#Figure 1
+# Figure 1
 
-##8-gene NFAT signature and MeCP2 expression across different breast cancer metastases
+## 8-gene NFAT signature and MeCP2 expression across different breast cancer metastases
 
 The analysis is based on GSE14020. We need to convert the **ENSEMBL IDs** to **Gene Symbols**, which can be done using `biomaRt` package.
 
@@ -48,9 +48,9 @@ fit<-aov(allmets.mn.gene["MECP2",] ~ Met.Site, allmets.ann.cal)
 summary(fit)
 ```
 
-#Figure S1
+# Figure S1
 
-##Metastasis-free survival curve
+## Metastasis-free survival curve
 This analysis is based on a combined Erasmus/MSKCC dataset (GSE2603, 5327, 2034, and 12276) in relation to the mcSig-predicted NFAT activity.
 
 ```{r}
