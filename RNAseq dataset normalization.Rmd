@@ -1,0 +1,51 @@
+# RNAseq datase normalization
+
+This is based on the dataset of GSE110451. We use `DEseq2` to normalize the data in [R programming](https://www.r-project.org/).
+
+```{r}
+source("https://bioconductor.org/biocLite.R")
+biocLite("DESeq2")
+library(DESeq2)
+human_count <- read.table("newVB2_human.count.txt", header=TRUE, sep="\t", row.names=1)
+colnames(human_count) <- sub("\\..+", "", colnames(human_count))
+human_count.ann <- data.frame(type=c("IVBL","IVBL","IVBL","IVBL","IVBL","IVBL","IVBL","IVBL","Orth","Orth","Orth","Orth","Orth","Orth","Orth"),row.names=colnames(human_count))
+human_count.dds <- DESeqDataSetFromMatrix(round(data.matrix(human_count)), colData=human_count.ann, design=~ type)
+human_count.dds <- DESeq(human_count.dds)
+sizeFactors(human_count.dds) ## This is the read coverage/sequence depth for each sample
+human_count_rld <- rlog(human_count.dds) ## We use regularized log transformation (rld)
+human_count_rld_gene <- assay(human_count_rld)
+```
+
+Then, we need to convert the **ENSEMBL IDs** to **Gene Symbols**, which can be done using `biomaRt` package.
+
+```{r}
+library(biomaRt)
+
+ensembl <- useMart("ENSEMBL_MART_ENSEMBL", host="www.ensembl.org")
+ensembl <- useDataset("hsapiens_gene_ensembl",mart=ensembl)
+rownames(human_count_rld_gene) <- sub("\\..+", "", rownames(human_count_rld_gene))
+map <- getBM(mart=ensembl, attributes=c("ensembl_gene_id", "hgnc_symbol"), filters="ensembl_gene_id", values=rownames(human_count_rld_gene))
+map <- map[map$hgnc_symbol!="", ]
+genenames <- unique(map$hgnc_symbol[map$ensembl_gene_id %in% rownames(human_count_rld_gene)])
+
+human_count_gene <- matrix(NA, nrow=length(genenames), ncol=ncol(human_count_rld_gene))
+rownames(human_count_gene) <- genenames
+colnames(human_count_gene) <- rownames(human_count.ann)
+
+for(g in genenames) {
+  p <- as.character(map$ensembl_gene_id[map$hgnc_symbol==g])
+  if(length(p)==1) {
+    human_count_gene[g, ] <- human_count_rld_gene[p, ]
+  }
+  else{
+    human_count_gene[g, ] <- apply(human_count_rld_gene[p, ], 2, max)
+  }
+}
+
+#Check normalization
+boxplot(human_count_gene)
+
+
+save(human_count_gene,human_count.ann,human_count_rld_gene, human_count,file="VIVO_RNAseq_normalized.RData")
+save(human_count,file="VIVO_RNAseq.RData")
+```
