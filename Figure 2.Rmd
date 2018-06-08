@@ -1,0 +1,17 @@
+# Figure 2
+
+## NFATsig and MeCP2  in bone lesions versus orthotopic tumors
+The analysis is based on GSE110451.
+
+```{r}
+NFATsig<-c("FAP","COL3A1","ASPN","MRC2","ANGPTL2","MGP","CAVIN1","TWIST1")
+NFATsig<-NFATsig[NFATsig %in% rownames(human_count_gene)]
+NFAT_sig <- apply(human_count_gene[NFATsig, ], 2, sum)
+boxplot(NFAT_sig ~ human_count.ann$type)
+t.test(NFAT_sig ~ type, human_count.ann)
+
+
+boxplot(human_count_gene["MECP2",] ~ human_count.ann$type)
+title(main="CX43")
+t.test(human_count_gene["MECP2",] ~ human_count.ann$type)
+```
