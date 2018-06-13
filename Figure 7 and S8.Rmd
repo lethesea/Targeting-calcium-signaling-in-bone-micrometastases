@@ -1,0 +1,31 @@
+# Figure 7 and Figure S8
+
+## Heatmaps shown the efficacies of drug treatment in BICA
+
+This is the code to visualize the drug treatment effect by heatmap, which is applied in Figure 7B and Figure S8C & S8D.
+Here we use Figure S8C as an example:
+
+```{r}
+#source: http://sebastianraschka.com/Articles/heatmaps_in_r.html
+# load the package needed
+if (!require("gplots")) {
+  install.packages("gplots", dependencies = TRUE)
+  library(gplots)
+}
+if (!require("RColorBrewer")) {
+  install.packages("RColorBrewer", dependencies = TRUE)
+  library(RColorBrewer)
+}
+data1 <- read.csv("C:/Bioinformatics/Therapy/BICA_DF.csv", comment.char="#")
+rnames <- data1[,1]
+mat_data1 <- data.matrix(data1[,2:ncol(data1)])
+rownames(mat_data1) <- rnames
+
+## blew colour 
+my_palette <- colorRampPalette(c("#a63603","white", "#3F007D"))(n = 299)
+col_breaks = c(seq(-1,-0.51,length=100),  
+               seq(-0.5,0.5,length=100),           
+               seq(0.51,1,length=100))             
+
+heatmap.2(mat_data1,trace="none", col=my_palette, breaks=col_breaks, Rowv="NA", Colv="NA", dendrogram="none")
+```
