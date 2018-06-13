@@ -16,16 +16,19 @@ if (!require("RColorBrewer")) {
   install.packages("RColorBrewer", dependencies = TRUE)
   library(RColorBrewer)
 }
+
+# load the dataset
 data1 <- read.csv("C:/Bioinformatics/Therapy/BICA_DF.csv", comment.char="#")
 rnames <- data1[,1]
 mat_data1 <- data.matrix(data1[,2:ncol(data1)])
 rownames(mat_data1) <- rnames
 
-## blew colour 
+# blew colour 
 my_palette <- colorRampPalette(c("#a63603","white", "#3F007D"))(n = 299)
 col_breaks = c(seq(-1,-0.51,length=100),  
                seq(-0.5,0.5,length=100),           
                seq(0.51,1,length=100))             
 
+# Generate heatmap
 heatmap.2(mat_data1,trace="none", col=my_palette, breaks=col_breaks, Rowv="NA", Colv="NA", dendrogram="none")
 ```
