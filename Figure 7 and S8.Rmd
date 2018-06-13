@@ -1,8 +1,8 @@
 # Figure 7 and Figure S8
 
-## Heatmaps shown the efficacies of drug treatment in BICA
+## the efficacies of drug treatment in BICA
 
-This is the code to visualize the drug treatment effect by heatmap, which is applied in Figure 7B and Figure S8C & S8D.
+This is the code to visualize the drug treatment effect (inhibition rate) by heatmap, which is applied in Figure 7B and Figure S8C & S8D.
 Here we use Figure S8C as an example:
 
 ```{r}
