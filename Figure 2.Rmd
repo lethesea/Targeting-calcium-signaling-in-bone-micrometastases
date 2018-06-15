@@ -10,6 +10,8 @@ NFATsig<-NFATsig[NFATsig %in% rownames(human_count_gene)]
 NFAT_sig <- apply(human_count_gene[NFATsig, ], 2, sum)
 
 ##One-way anova analysis on NFAT signature and MeCP2 expression between IVBL and orthotopic tumor.
+boxplot(NFAT_sig ~ human_count.ann$type)
+title(main="NFAT_sig")
 fit1<-aov(NFAT_sig ~ human_count.ann$type)
 summary(fit1)
 
