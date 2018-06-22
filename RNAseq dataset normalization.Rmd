@@ -1,4 +1,4 @@
-# RNAseq datase normalization
+# RNAseq dataset normalization
 
 This is based on the dataset of GSE110451. We use `DEseq2` to normalize the data in [R programming](https://www.r-project.org/).
 
@@ -49,7 +49,7 @@ boxplot(human_count_gene)
 save(human_count_gene,human_count.ann,human_count_rld_gene, human_count,file="VIVO_RNAseq_normalized.RData")
 save(human_count,file="VIVO_RNAseq.RData")
 ```
-# RNAarray datase normalization
+# RNAarray dataset normalization
 GSE11041 serves as an example.
 We need to convert the **ENSEMBL IDs** to **Gene Symbols**, which can be done using `biomaRt` package.
 
