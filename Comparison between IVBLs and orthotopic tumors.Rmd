@@ -1,0 +1,39 @@
+# Figure 2B and 4B
+
+## NFATsig, MEF2sig, MeCP2 and GJA1 expression in bone lesions versus orthotopic tumors
+Same procedures of "Figure 1 and 5.Rmd" were applied
+
+```{r}
+# The analysis is based on GSE110451. Load RNAseq data of pre-clinical models: in vivo bone lesions and orthotopic tumors
+load("Path/to/Pre-clinical-model-GSE110451.RData")
+
+
+# The same Tripathy et al, NFAT signature, Di Giorgio et al, MEF2 signature, MeCP2, and GJA1 expression in GSE110451, the pre-clinical models, Figure 2B and 4B
+gse110451.ann$NFAT.sig <- apply(gse110451.clps[which(is.element(rownames(gse110451.clps), nfat.sig)),], 2, sum)
+gse110451.ann$NFAT.sig <- re.scale(gse110451.ann$NFAT.sig)
+p <- ggplot(gse110451.ann, aes(Site.2, NFAT.sig)) 
+p + geom_boxplot(outlier.colour="white", aes(fill=Site.2)) + geom_jitter(width=0.4, size=4, col="dark grey") + theme(panel.grid.major = element_blank(), axis.line.x = element_line(size=0.5, colour="black"), axis.line.y = element_line(size=0.5, colour="black"), panel.grid.minor=element_blank(), panel.background=element_blank(), axis.text.x=element_text(colour="black", size=14), axis.text.y=element_text(colour="black", size=14), text=element_text(size=16))
+mets.aov <- aov(NFAT.sig~Site.2, gse110451.ann)
+summary(mets.aov)
+
+gse110451.ann$MEF2.sig <- apply(gse110451.clps[which(is.element(rownames(gse110451.clps), mef2.sig)),], 2, sum)
+gse110451.ann$MEF2.sig <- re.scale(gse110451.ann$MEF2.sig)
+p <- ggplot(gse110451.ann, aes(Site.2, MEF2.sig)) 
+p + geom_boxplot(outlier.colour="white", aes(fill=Site.2)) + geom_jitter(width=0.4, size=4, col="dark grey") + theme(panel.grid.major = element_blank(), axis.line.x = element_line(size=0.5, colour="black"), axis.line.y = element_line(size=0.5, colour="black"), panel.grid.minor=element_blank(), panel.background=element_blank(), axis.text.x=element_text(colour="black", size=14), axis.text.y=element_text(colour="black", size=14), text=element_text(size=16))
+mets.aov <- aov(MEF2.sig~Site.2, gse110451.ann)
+summary(mets.aov)
+
+gse110451.ann$MeCP2 <- gse110451.clps["MCEP2",]
+gse110451.ann$MeCP2 <- re.scale(gse110451.ann$MeCP2)
+p <- ggplot(gse110451.ann, aes(Site.2, MeCP2)) 
+p + geom_boxplot(outlier.colour="white", aes(fill=Site.2)) + geom_jitter(width=0.4, size=4, col="dark grey") + theme(panel.grid.major = element_blank(), axis.line.x = element_line(size=0.5, colour="black"), axis.line.y = element_line(size=0.5, colour="black"), panel.grid.minor=element_blank(), panel.background=element_blank(), axis.text.x=element_text(colour="black", size=14), axis.text.y=element_text(colour="black", size=14), text=element_text(size=16))
+mets.aov <- aov(MeCP2~Site.2, gse110451.ann)
+summary(mets.aov)
+
+gse110451.ann$Cx43 <- gse110451.clps["GJA1",]
+gse110451.ann$Cx43 <- re.scale(gse110451.ann$Cx43)
+p <- ggplot(gse110451.ann, aes(Site.2, Cx43)) 
+p + geom_boxplot(outlier.colour="white", aes(fill=Site.2)) + geom_jitter(width=0.4, size=4, col="dark grey") + theme(panel.grid.major = element_blank(), axis.line.x = element_line(size=0.5, colour="black"), axis.line.y = element_line(size=0.5, colour="black"), panel.grid.minor=element_blank(), panel.background=element_blank(), axis.text.x=element_text(colour="black", size=14), axis.text.y=element_text(colour="black", size=14), text=element_text(size=16))
+mets.aov <- aov(Cx43~Site.2, gse110451.ann)
+summary(mets.aov)
+```
