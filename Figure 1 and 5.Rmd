@@ -37,7 +37,7 @@ gse79930.clps <- gse79930.clps[, -which(gse79930.ann$Site.2=="PROSTATE")]
 load("Path/to/Pre-clinical-model-GSE110451.RData")
 ```
 
-# GSVA as an unbiased way to identify top trancription factors in bone metaseatsis
+# GSVA as an unbiased way to identify top trancription factors in bone metaseatsis (Figure 1A)
 
 ```{r}
 #Path to downloaded GSEA C3 gene sets (transcription targets)
@@ -70,7 +70,7 @@ p2 + geom_boxplot(outlier.colour="white") + geom_jitter(width=0.4, size=4, col="
 ```
 
 
-## Validate NFAT and MEF2 using independent approaches and extend the analysis to prostate cancer metastases
+## Validate NFAT and MEF2 using independent approaches (Figure 1B and 1C)
 
 ```{r}
 # The 8-gene NFAT signature from Tripathy et al, which is independnet from NFAT target genes defined in MSigDB
@@ -125,7 +125,9 @@ mets.aov <- aov(Cx43~Met.Site, allmets.ann.cal)
 summary(mets.aov)
 ```
 
-# Apply the same exact procedures for Figures 1E-G and Figure 5E in prostate cancer
+# Analysis on Prostate cancer
+
+## Apply the same exact procedures for Figures 1E-G and Figure 5E in prostate cancer
 
 ```{r}
 gse77930.ann$NFAT.sig <- apply(gse77930.clps[which(is.element(rownames(gse77930.clps), nfat.sig)),], 2, sum)
