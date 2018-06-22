@@ -37,6 +37,8 @@ gse79930.clps <- gse79930.clps[, -which(gse79930.ann$Site.2=="PROSTATE")]
 load("Path/to/Pre-clinical-model-GSE110451.RData")
 ```
 
+
+
 # GSVA as an unbiased way to identify top trancription factors in bone metaseatsis (Figure 1A)
 
 ```{r}
@@ -56,6 +58,8 @@ bone.sig.tft <- names(allmets.tft.sam@fold)[which(allmets.tft.sam@p.value < 0.00
 allmets.ann$NFATQ6.msigdb <- allmets.tft$es.obs["NFAT_Q6",]
 allmets.ann$MEF2.msigdb <- allmets.tft$es.obs["MEF2_01",]
 ```
+
+
 
 # Analysis on Breast cancer metastasis
 
@@ -102,6 +106,7 @@ mets.aov <- aov(MEF2.sig~Met.Site, allmets.ann.cal)
 summary(mets.aov)
 ```
 
+
 ## Examine MeCP2 expression to generate Figure 1D following similar procedures
 
 ```{r}
@@ -124,6 +129,8 @@ p + geom_boxplot(outlier.colour="white", aes(fill=Met.Site)) + geom_jitter(width
 mets.aov <- aov(Cx43~Met.Site, allmets.ann.cal)
 summary(mets.aov)
 ```
+
+
 
 # Same analysis on Prostate cancer
 
@@ -189,11 +196,13 @@ summary(mets.aov)
 ```
 
 
-# correlation between mef2, nfat, mecp2 and Cx43(GJA1):(Figure 5F and S5C)
+# correlation analysis
 
-## An example in gse77930 and MEF2 signature. Other sub-panels in Figure 5F and S5C can be reproduced by replacing gse77930 with other datasets, and MEF2.sig with NFAT.sig or MeCP2. 
+## correlation between mef2, nfat, mecp2 and Cx43(GJA1):(Figure 5F and S5C)
 
 ```{r}
+## An example in gse77930 and MEF2 signature. Other sub-panels in Figure 5F and S5C can be reproduced by replacing gse77930 with other datasets, and MEF2.sig with NFAT.sig or MeCP2. 
+
 p5 <- ggplot(gse77930.ann[which(gse77930.ann$Site.2=="BONE"),], aes(Cx43, MEF2.sig)) 
 p5  + geom_point(size=6, col="black") + geom_smooth(method=lm) + theme(panel.grid.major = element_blank(), axis.line.x = element_line(size=0.5, colour="black"), axis.line.y = element_line(size=0.5, colour="black"), panel.grid.minor=element_blank(), panel.background=element_blank(), axis.text.x=element_text(colour="black", size=14), axis.text.y=element_text(colour="black", size=14), text=element_text(size=16))
 cor.test(gse77930.ann$MEF2.sig[which(gse77930.ann$Site.2=="BONE")], 
