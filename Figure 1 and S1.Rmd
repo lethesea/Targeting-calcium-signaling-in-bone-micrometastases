@@ -1,0 +1,80 @@
+# Figure 1
+
+## 8-gene NFAT signature and MeCP2 expression across different breast cancer metastases
+
+The analysis is based on GSE14020. We need to convert the **ENSEMBL IDs** to **Gene Symbols**, which can be done using `biomaRt` package.
+
+```{r}
+library(biomaRt)
+
+ensembl <- useMart("ENSEMBL_MART_ENSEMBL", host="www.ensembl.org")
+listDatasets(ensembl) ## list available data set (species)
+ensembl <- useDataset("hsapiens_gene_ensembl",mart=ensembl)
+listFilters(ensembl) ## list available filters (probe set/microarray platform)
+map <- getBM(mart=ensembl, attributes=c("affy_hg_u133a", "hgnc_symbol"), filters="affy_hg_u133a", values=rownames(allmets.mn))
+map <- map[map$hgnc_symbol!="", ]
+sample.probe <- rownames(allmets.mn)[rownames(allmets.mn) %in% map$affy_hg_u133a]
+ambiguous <- sapply(sample.probe, function(x) length(unique(map$hgnc_symbol[map$affy_hg_u133a==x]))>1) ## remove probes that map to multiple genes
+sample.probe <- sample.probe[!ambiguous]
+map <- map[map$affy_hg_u133a %in% sample.probe, ]
+genenames <- unique(map$hgnc_symbol[map$affy_hg_u133a %in% sample.probe])
+
+allmets.mn.gene <- matrix(NA, nrow=length(genenames), ncol=ncol(allmets.mn))
+rownames(allmets.mn.gene) <- genenames
+colnames(allmets.mn.gene) <- colnames(allmets.mn)
+for(g in genenames) {
+  probes <- as.character(map$affy_hg_u133a[map$hgnc_symbol==g])
+  if(length(probes)==1) {
+    allmets.mn.gene[g, ] <- allmets.mn[probes, ]
+  }
+  else{
+    allmets.mn.gene[g, ] <- apply(allmets.mn[probes, ], 2, median)
+  }
+}
+```
+
+Then work on NFAT and MeCP2 analysis.
+
+```{r}
+##Generate NFAT 8-gene signature
+NFATsig<-c("FAP","COL3A1","ASPN","MRC2","ANGPTL2","MGP","CAVIN1","TWIST1")
+NFATsig<-NFATsig[NFATsig %in% rownames(allmets.mn.gene)]
+NFAT_sig <- apply(allmets.mn.gene[NFATsig, ], 2, sum)
+
+##One-way anova analysis on NFAT signature and MeCP2 expression across different metastasis
+fit<-aov(NFAT_sig ~ Met.Site, allmets.ann.cal)
+summary(fit)
+fit<-aov(allmets.mn.gene["MECP2",] ~ Met.Site, allmets.ann.cal)
+summary(fit)
+```
+
+# Figure S1
+
+## Metastasis-free survival curve
+This analysis is based on a combined Erasmus/MSKCC dataset (GSE2603, 5327, 2034, and 12276) in relation to the mcSig-predicted NFAT activity.
+
+```{r}
+##Generate NFAT 8-gene signature
+NFATsig<-c("FAP","COL3A1","ASPN","MRC2","ANGPTL2","MGP","PTRF","TWIST1")
+NFATsig<-NFATsig[NFATsig %in% rownames(emc.msk.exp)]
+NFAT_sig <- apply(emc.msk.exp[NFATsig, ], 2, sum)
+NFAT.g <- cut(NFAT_sig, breaks = quantile(NFAT_sig, probs = seq(from = 0, to = 1, by = 1/3)), labels = c("low", "med", "high"))
+NFAT.g[is.na(NFAT.g)] = "low"
+emc.msk.ann$NFAT.g <- NFAT.g
+
+##Kaplan-Meier plots of the probability of bone, lung and brain metastasis-free survival
+survdiff(Surv(emc.msk.ann$MFS, emc.msk.ann$BM) ~ NFAT.g)
+coxph(Surv(emc.msk.ann$MFS, emc.msk.ann$BM) ~ NFAT_sig)
+plot(survfit(Surv(emc.msk.ann$MFS, emc.msk.ann$BM) ~ NFAT.g), col=c("#4DAF4A", "#FF7F00", "#E41A1C"), lty=1, xlab = "Months", ylab = "Metastasis-Free Survival prob.", ylim=c(0, 1), main="NFATsig in Bone Metastasis", mark.time=T)
+legend("topright", c("low", "med", "high"), col=c("#4DAF4A", "#FF7F00", "#E41A1C"), lty=1, bty = "n")
+
+survdiff(Surv(emc.msk.ann$MFS, emc.msk.ann$BrM) ~ NFAT.g)
+coxph(Surv(emc.msk.ann$MFS, emc.msk.ann$BrM) ~ NFAT_sig)
+plot(survfit(Surv(emc.msk.ann$MFS, emc.msk.ann$BrM) ~ NFAT.g), col=c("#4DAF4A", "#FF7F00", "#E41A1C"), lty=1, xlab = "Months", ylab = "Metastasis-Free Survival prob.", ylim=c(0, 1), main="NFATsig in Brain Metastasis", mark.time=T)
+legend("topright", c("low", "med", "high"), col=c("#4DAF4A", "#FF7F00", "#E41A1C"), lty=1, bty = "n")
+
+survdiff(Surv(emc.msk.ann$MFS, emc.msk.ann$LM) ~ NFAT.g)
+coxph(Surv(emc.msk.ann$MFS, emc.msk.ann$LM) ~ NFAT_sig)
+plot(survfit(Surv(emc.msk.ann$MFS, emc.msk.ann$LM) ~ NFAT.g), col=c("#4DAF4A", "#FF7F00", "#E41A1C"), lty=1, xlab = "Months", ylab = "Metastasis-Free Survival prob.", ylim=c(0, 1), main="NFATsig in Lung Metastasis", mark.time=T)
+legend("topright", c("low", "med", "high"), col=c("#4DAF4A", "#FF7F00", "#E41A1C"), lty=1, bty = "n")
+```
