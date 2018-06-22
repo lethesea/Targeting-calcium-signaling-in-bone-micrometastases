@@ -125,7 +125,7 @@ mets.aov <- aov(Cx43~Met.Site, allmets.ann.cal)
 summary(mets.aov)
 ```
 
-# Analysis on Prostate cancer
+# Same analysis on Prostate cancer
 
 ## Apply the same exact procedures for Figures 1E-G and Figure 5E in prostate cancer
 
@@ -189,11 +189,11 @@ summary(mets.aov)
 ```
 
 
-## Figure 5 and S5: correlation between mef2, nfat, mecp2 and Cx43(GJA1)
+# correlation between mef2, nfat, mecp2 and Cx43(GJA1):(Figure 5F and S5C)
 
-```{r}
 ## An example in gse77930 and MEF2 signature. Other sub-panels in Figure 5F and S5C can be reproduced by replacing gse77930 with other datasets, and MEF2.sig with NFAT.sig or MeCP2. 
 
+```{r}
 p5 <- ggplot(gse77930.ann[which(gse77930.ann$Site.2=="BONE"),], aes(Cx43, MEF2.sig)) 
 p5  + geom_point(size=6, col="black") + geom_smooth(method=lm) + theme(panel.grid.major = element_blank(), axis.line.x = element_line(size=0.5, colour="black"), axis.line.y = element_line(size=0.5, colour="black"), panel.grid.minor=element_blank(), panel.background=element_blank(), axis.text.x=element_text(colour="black", size=14), axis.text.y=element_text(colour="black", size=14), text=element_text(size=16))
 cor.test(gse77930.ann$MEF2.sig[which(gse77930.ann$Site.2=="BONE")], 
