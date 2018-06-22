@@ -1,4 +1,4 @@
-# Figure 2B and 4B
+# Comparison between IVBLs and orthotopic tumors
 
 ## NFATsig, MEF2sig, MeCP2 and GJA1 expression in bone lesions versus orthotopic tumors
 Same procedures of "Figure 1 and 5.Rmd" were applied
