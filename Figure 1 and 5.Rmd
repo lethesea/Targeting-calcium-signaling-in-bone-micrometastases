@@ -57,7 +57,9 @@ allmets.ann$NFATQ6.msigdb <- allmets.tft$es.obs["NFAT_Q6",]
 allmets.ann$MEF2.msigdb <- allmets.tft$es.obs["MEF2_01",]
 ```
 
-# Generate Figure shown in Figure S1A. Note that in the manuscript, only mets to commone sites are shown. Two rare sites, "chest wall" and "duodenuam" are removed.
+# Analysis on Breast cancer metastasis
+
+## Generate Figure shown in Figure S1A. Note that in the manuscript, only mets to commone sites are shown. Two rare sites, "chest wall" and "duodenuam" are removed.
 
 ```{r}
 p <- ggplot(allmets.ann, aes(Met.Site, NFATQ6.msigdb, fill=Met.Site))
@@ -68,7 +70,7 @@ p2 + geom_boxplot(outlier.colour="white") + geom_jitter(width=0.4, size=4, col="
 ```
 
 
-# Validate NFAT and MEF2 using independent approaches and extend the analysis to prostate cancer metastases
+## Validate NFAT and MEF2 using independent approaches and extend the analysis to prostate cancer metastases
 
 ```{r}
 # The 8-gene NFAT signature from Tripathy et al, which is independnet from NFAT target genes defined in MSigDB
@@ -100,7 +102,7 @@ mets.aov <- aov(MEF2.sig~Met.Site, allmets.ann.cal)
 summary(mets.aov)
 ```
 
-# Examine MeCP2 expression to generate Figure 1D following similar procedures
+## Examine MeCP2 expression to generate Figure 1D following similar procedures
 
 ```{r}
 allmets.ann.cal$MeCP2 <- allmets.clps["MECP2",]
@@ -112,7 +114,7 @@ summary(mets.aov)
 ```
 
 
-# Examine GJA1 expression to generate Figure 5D following similar procedures
+## Examine GJA1 expression to generate Figure 5D following similar procedures
 
 ```{r}
 allmets.ann.cal$Cx43 <- allmets.clps["GJA1",]
@@ -185,11 +187,11 @@ summary(mets.aov)
 ```
 
 
-# Figure 5 and S5: correlation between mef2, nfat, mecp2 and Cx43(GJA1)
-
-## An example in gse77930 and MEF2 signature. Other sub-panels in Figure 5F and S5C can be reproduced by replacing gse77930 with other datasets, and MEF2.sig with NFAT.sig or MeCP2. 
+## Figure 5 and S5: correlation between mef2, nfat, mecp2 and Cx43(GJA1)
 
 ```{r}
+## An example in gse77930 and MEF2 signature. Other sub-panels in Figure 5F and S5C can be reproduced by replacing gse77930 with other datasets, and MEF2.sig with NFAT.sig or MeCP2. 
+
 p5 <- ggplot(gse77930.ann[which(gse77930.ann$Site.2=="BONE"),], aes(Cx43, MEF2.sig)) 
 p5  + geom_point(size=6, col="black") + geom_smooth(method=lm) + theme(panel.grid.major = element_blank(), axis.line.x = element_line(size=0.5, colour="black"), axis.line.y = element_line(size=0.5, colour="black"), panel.grid.minor=element_blank(), panel.background=element_blank(), axis.text.x=element_text(colour="black", size=14), axis.text.y=element_text(colour="black", size=14), text=element_text(size=16))
 cor.test(gse77930.ann$MEF2.sig[which(gse77930.ann$Site.2=="BONE")], 
