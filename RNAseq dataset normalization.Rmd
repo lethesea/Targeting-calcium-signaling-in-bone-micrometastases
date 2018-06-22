@@ -6,7 +6,7 @@ This is based on the dataset of GSE110451. We use `DEseq2` to normalize the data
 source("https://bioconductor.org/biocLite.R")
 biocLite("DESeq2")
 library(DESeq2)
-human_count <- read.table("newVB2_human.count.txt", header=TRUE, sep="\t", row.names=1)
+human_count <- read.table("VIVO_RNAseq_human.count.txt", header=TRUE, sep="\t", row.names=1)
 colnames(human_count) <- sub("\\..+", "", colnames(human_count))
 human_count.ann <- data.frame(type=c("IVBL","IVBL","IVBL","IVBL","IVBL","IVBL","IVBL","IVBL","Orth","Orth","Orth","Orth","Orth","Orth","Orth"),row.names=colnames(human_count))
 human_count.dds <- DESeqDataSetFromMatrix(round(data.matrix(human_count)), colData=human_count.ann, design=~ type)
@@ -48,4 +48,38 @@ boxplot(human_count_gene)
 
 save(human_count_gene,human_count.ann,human_count_rld_gene, human_count,file="VIVO_RNAseq_normalized.RData")
 save(human_count,file="VIVO_RNAseq.RData")
+```
+# RNAarray datase normalization
+GSE11041 serves as an example.
+We need to convert the **ENSEMBL IDs** to **Gene Symbols**, which can be done using `biomaRt` package.
+
+```{r}
+load("Path/to/TheMetsOfBreastCancers.R")
+
+library(biomaRt)
+
+ensembl <- useMart("ENSEMBL_MART_ENSEMBL", host="www.ensembl.org")
+listDatasets(ensembl) ## list available data set (species)
+ensembl <- useDataset("hsapiens_gene_ensembl",mart=ensembl)
+listFilters(ensembl) ## list available filters (probe set/microarray platform)
+map <- getBM(mart=ensembl, attributes=c("affy_hg_u133a", "hgnc_symbol"), filters="affy_hg_u133a", values=rownames(allmets.mn))
+map <- map[map$hgnc_symbol!="", ]
+sample.probe <- rownames(allmets.mn)[rownames(allmets.mn) %in% map$affy_hg_u133a]
+ambiguous <- sapply(sample.probe, function(x) length(unique(map$hgnc_symbol[map$affy_hg_u133a==x]))>1) ## remove probes that map to multiple genes
+sample.probe <- sample.probe[!ambiguous]
+map <- map[map$affy_hg_u133a %in% sample.probe, ]
+genenames <- unique(map$hgnc_symbol[map$affy_hg_u133a %in% sample.probe])
+
+allmets.mn.gene <- matrix(NA, nrow=length(genenames), ncol=ncol(allmets.mn))
+rownames(allmets.mn.gene) <- genenames
+colnames(allmets.mn.gene) <- colnames(allmets.mn)
+for(g in genenames) {
+  probes <- as.character(map$affy_hg_u133a[map$hgnc_symbol==g])
+  if(length(probes)==1) {
+    allmets.mn.gene[g, ] <- allmets.mn[probes, ]
+  }
+  else{
+    allmets.mn.gene[g, ] <- apply(allmets.mn[probes, ], 2, median)
+  }
+}
 ```
