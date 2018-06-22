@@ -4,7 +4,9 @@
 Same procedures of "Figure 1 and 5.Rmd" were applied
 
 ```{r}
-# The analysis is based on GSE110451. Load RNAseq data of pre-clinical models: in vivo bone lesions and orthotopic tumors
+# The analysis is based on GSE110451. 
+## Load RNAseq data of pre-clinical models: in vivo bone lesions and orthotopic tumors
+
 load("Path/to/Pre-clinical-model-GSE110451.RData")
 
 
