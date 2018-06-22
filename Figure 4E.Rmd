@@ -1,0 +1,16 @@
+# Analysis of GSE29036 in Figure 4E
+
+msc.cc.tft <- gsva(msc.cc.clps, , tft.set, method="gsva")
+msc.cc.ann$NFAT <- msc.cc.tft$es.obs["NFAT_Q6",]
+msc.cc.ann$MEF2 <- msc.cc.tft$es.obs["MEF2_01",]
+msc.cc.ann$MECP2 <- msc.cc.clps["MECP2",]
+
+pcc <- ggplot(msc.cc.ann[which(msc.cc.ann$Stromal.type=="Fibroblast"),], aes(Status, NFAT, Cancer.cell))
+pcc + geom_boxplot(outlier.colour="white") + geom_jitter(width=0.4, size=6, aes(col=Cancer.cell)) + theme(panel.grid.major = element_blank(), axis.line.x = element_line(size=0.5, colour="black"), axis.line.y = element_line(size=0.5, colour="black"), panel.grid.minor=element_blank(), panel.background=element_blank(), axis.text.x=element_text(colour="black", size=14), axis.text.y=element_text(colour="black", size=14), text=element_text(size=16))
+
+pcc <- ggplot(msc.cc.ann[which(msc.cc.ann$Type=="Cell.line"),], aes(Stromal.type, MEF2, Status, Cancer.cell))
+pcc + geom_boxplot(outlier.colour="white", aes(colour=Status)) + geom_jitter(width=0.4, size=4, aes(col=Cancer.cell)) + theme(panel.grid.major = element_blank(), axis.line.x = element_line(size=0.5, colour="black"), axis.line.y = element_line(size=0.5, colour="black"), panel.grid.minor=element_blank(), panel.background=element_blank(), axis.text.x=element_text(colour="black", size=14), axis.text.y=element_text(colour="black", size=14), text=element_text(size=16))
+
+pcc <- ggplot(msc.cc.ann[which(msc.cc.ann$Type=="Cell.line"),], aes(Stromal.type, MECP2, Status, Cancer.cell))
+pcc + geom_boxplot(outlier.colour="white", aes(colour=Status)) + geom_jitter(width=0.4, size=4, aes(col=Cancer.cell)) + theme(panel.grid.major = element_blank(), axis.line.x = element_line(size=0.5, colour="black"), axis.line.y = element_line(size=0.5, colour="black"), panel.grid.minor=element_blank(), panel.background=element_blank(), axis.text.x=element_text(colour="black", size=14), axis.text.y=element_text(colour="black", size=14), text=element_text(size=16))
+
