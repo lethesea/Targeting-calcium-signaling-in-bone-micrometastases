@@ -63,9 +63,10 @@ allmets.ann$MEF2.msigdb <- allmets.tft$es.obs["MEF2_01",]
 
 # Analysis on Breast cancer metastasis
 
-## Generate Figure shown in Figure S1A. Note that in the manuscript, only mets to commone sites are shown. Two rare sites, "chest wall" and "duodenuam" are removed.
+## Generate Figure shown in Figure S1A. 
 
 ```{r}
+## Note that in the manuscript, only mets to commone sites are shown. Two rare sites, "chest wall" and "duodenuam" are removed.
 p <- ggplot(allmets.ann, aes(Met.Site, NFATQ6.msigdb, fill=Met.Site))
 p + geom_boxplot(outlier.colour="white") + geom_jitter(width=0.4, size=4, col="dark grey") + theme(panel.grid.major = element_blank(), axis.line.x = element_line(size=0.5, colour="black"), axis.line.y = element_line(size=0.5, colour="black"), panel.grid.minor=element_blank(), panel.background=element_blank(), axis.text.x=element_text(colour="black", size=14), axis.text.y=element_text(colour="black", size=14), text=element_text(size=16))
 
