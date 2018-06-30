@@ -79,7 +79,7 @@ for(g in genenames) {
     allmets.clps[g, ] <- allmets.mn[probes, ]
   }
   else{
-    allmets.clps[g, ] <- apply(allmets.mn[probes, ], 2, median)
+    allmets.clps[g, ] <- apply(allmets.mn[probes, ], 2, max)
   }
 }
 ```
