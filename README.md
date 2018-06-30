@@ -44,11 +44,11 @@ Please contact haiw@bcm.edu if you have any questions.
 | --- | allmets.ann | Annotation of breast cancer metastases containing site of metastasis information . The order of rows (samples) is exactly the same as the order of columns in allmets.clps. |
 | CRPC-mets-gse77930.RData (The castration resistance prostate cancer metastasis data from GSE77930 | gse77930 | Data matrix with each row as a probe on microarray and each column as a metastasis sample |
 | * Please download all the splitted files (.zip, .z01, .z02, .z03) before unzip  | gse77930.clps | Data matrix derived from gse77930 with probes mapped to the same gene averaged into one value. |
-| --- | gse77930.ann | Annotation of prostate cancer metastases containing site information . The order of rows (samples) is exactly the same as the order of columns in allmets.clps. |
+| --- | gse77930.ann | Annotation of prostate cancer metastases containing site information . The order of rows (samples) is exactly the same as the order of columns in gse77930.clps. |
 | Pre-clinical-model-GSE110451.RData | gse110451.clps | Data matrix derived from gse110451 with each role as a gene and each role as a biological replicate of either in vivo bone lesion or a orthotopic tumor. |
 | --- | gse110451.ann | Annotation of sample type (IVBL: in vivo bone lesion, or Ortho: orthotopic tumors). |
 | Stromal-cell-with-CC-GSE29036.RData (MSC, myoepithelial cells and fibroblasts co-cultured with various cancer cells) | msc.cc | Data matrix with each row as an Affymetrix U133 probe and each column as a metastasis sample |
 | * Please download all the splitted files (.zip, .z01, .z02) before unzip  | msc.cc.clps | Data matrix derived from msc.cc with probes mapped to the same gene averaged into one value. |
-| --- | msc.cc.ann | Annotation of both parties of cells in each co-culture sample. The order of rows (samples) is exactly the same as the order of columns in allmets.clps. |
+| --- | msc.cc.ann | Annotation of both parties of cells in each co-culture sample. The order of rows (samples) is exactly the same as the order of columns in msc.cc.clps. |
 | mef2 signature.txt | --- | MEF2 signature obtained from Di Giorgio et al., PloS Genetics 2017. |
 
