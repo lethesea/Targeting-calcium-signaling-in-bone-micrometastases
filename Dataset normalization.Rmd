@@ -1,6 +1,6 @@
 # RNAseq dataset normalization
 
-This is based on the dataset of GSE110451. We use `DEseq2` to normalize the data in [R programming](https://www.r-project.org/).
+GSE110451 serves as an example. We use `DEseq2` to normalize the data in [R programming](https://www.r-project.org/).
 
 ```{r}
 source("https://bioconductor.org/biocLite.R")
